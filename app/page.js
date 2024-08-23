@@ -78,7 +78,7 @@ return (
     <main className="relative top-0 h-screen py-0 overflow-hidden z-50 bg-black text-white" >
       <section className='backdrop-blur-lg h-screen flex flex-col items-center justify-center'>
           <div className='text-2xl py-3 md:text-5xl px-5 font-semibold my-1 '>RAG-Bot</div>
-          <div className=" md:border overflow-hidden bg-slate-950 md:border-black my-0 md:my-3 rounded-xl h-full w-screen  md:w-1/2  flex flex-col items-center justify-between">
+          <div className=" md:border overflow-hidden bg-slate-950 border border-slate-600 my-0 md:my-3 rounded-xl h-full w-screen  md:w-1/2  flex flex-col items-center justify-between">
               {/* message sections */}
               <div className="overflow-y-auto overflow-x-hidden rounded-xl py-2 px-2 w-full max-h-full">
               {messages.map((m, index) => (
