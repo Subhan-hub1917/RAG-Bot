@@ -40,7 +40,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',  // Set the content type to JSON
         },
-        body: JSON.stringify({ input }),
+        body: JSON.stringify({ userResponse:input }),
       });
       if (!res.ok) {
         setLoading(false)
