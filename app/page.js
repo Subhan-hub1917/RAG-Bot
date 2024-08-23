@@ -24,41 +24,56 @@ export default function Home() {
     scrollToBottom();
   },[messages])
   
-  const handleQuery=async(e)=>{
-    e.preventDefault();
-    if(input==''){
-      return
-    }
-    setLoading(true)
-    setQuery(prev=>({...prev,content:input}))
-    query.content=input
-    setMessages(prev=>[...prev,query])
-    setInput('')
-    try{
-      const res= await fetch("https://rate-my-professor-backend-git-main-subhan-hub1917s-projects.vercel.app/api/query-professors", {
-        method: 'POST',  // Add this line to specify the HTTP method
-        headers: {
-          'Content-Type': 'application/json',  // Set the content type to JSON
-        },
-        body: JSON.stringify({ userResponse:input }),
-      });
-      if (!res.ok) {
-        setLoading(false)
-        const errorText = await res.text(); 
-        throw new Error(`Network response was not ok: ${errorText}`);
-      }
-      const result=await res.json()
-      const systemResponse={
-        role:'system',
-        content:result.choices[0].message.content
-      }
-      setMessages(prev=>[...prev,systemResponse])
-      setLoading(false)
-    }
-    catch(error){
-      alert(`Erorr Requesting to Model ${error.message}`)
-    }
+  
+const handleQuery = async (e) => {
+  e.preventDefault();
+  if (input === '') {
+    return;
   }
+  setLoading(true);
+  setQuery((prev) => ({ ...prev, content: input }));
+  setMessages((prev) => [...prev, { role: 'user', content: input }]);
+
+  try {
+    const res = await fetch("https://rate-my-professor-backend-git-main-subhan-hub1917s-projects.vercel.app/api/query-professors", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userResponse: input }),
+    });
+
+    if (!res.ok) {
+      setLoading(false);
+      const errorText = await res.text();
+      throw new Error(`Network response was not ok: ${errorText}`);
+    }
+    const result = await res.json();
+    console.log("API Response:", result);
+
+    if (result && result.data) {
+      const systemResponse = {
+        role: 'system',
+        content: result.data,
+      };
+
+      setMessages((prev) => [...prev, systemResponse]);
+    } else {
+      console.error('Unexpected response structure:', result);
+      throw new Error('Unexpected response structure from API');
+    }
+
+    setLoading(false);
+    setInput('')
+  } catch (error) {
+    alert(`Error Requesting to Model: ${error.message}`);
+    console.error('Fetch error:', error); // Log the error to debug
+    setLoading(false);
+    setInput('')
+
+  }
+};
+
 return (
     <main className="relative top-0 h-screen py-0 overflow-hidden z-50 bg-black text-white" >
       <section className='backdrop-blur-lg h-screen flex flex-col items-center justify-center'>
